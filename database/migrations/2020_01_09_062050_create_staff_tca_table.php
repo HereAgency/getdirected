@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateClientsTable extends Migration
+class CreateStaffTcaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,8 @@ class CreateClientsTable extends Migration
      */
     public function up()
     {
-        Schema::create('clients', function (Blueprint $table) {
+        Schema::create('staff_tca', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('id_lastjob');
-            $table->string('name');
-            $table->string('phone');
-            $table->string('contact_name');
-            $table->date('since_date');
-            $table->integer('status')->default(0);
-            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -33,6 +26,6 @@ class CreateClientsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('clients');
+        Schema::dropIfExists('staff_tca');
     }
 }

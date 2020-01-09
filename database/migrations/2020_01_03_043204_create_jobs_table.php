@@ -16,14 +16,21 @@ class CreateJobsTable extends Migration
         Schema::create('jobs', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('id_client');
-            $table->integer('id_staff');
             $table->integer('job_type');
             $table->integer('shift_type');
+            $table->integer('number_utes');
+            $table->integer('number_trafic');
             $table->string('address');
+            $table->string('location');
             $table->string('setup_required');
+            $table->string('notes');
             $table->date('date');
             $table->date('time_start');
             $table->integer('status')->default(0);
+            $table->boolean('tbc')->default(false);
+            // JOBS X STAFF
+            // JOBS X ARCHIVOS
+            $table->softDeletes();
             $table->timestamps();
         });
     }

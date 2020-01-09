@@ -11,6 +11,15 @@ class Job extends Model
     ];
 
     public function staffs(){
-        return $this->belongsToMany('App\Staff');
+        return $this->belongsToMany('App\Staff', 'job_staff', 'job_id', 'staff_id');
     }
+
+    public function permits(){
+        return $this->belongsToMany('App\Archivo', 'job_permit', 'job_id', 'archivo_id');
+    }
+
+    public function tgs(){
+        return $this->belongsToMany('App\Archivo', 'job_tgs', 'job_id', 'archivo_id');
+    }
+
 }

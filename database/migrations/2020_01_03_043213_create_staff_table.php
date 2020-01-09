@@ -15,15 +15,19 @@ class CreateStaffTable extends Migration
     {
         Schema::create('staff', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('id_job');
+            $table->integer('relationship'); //EMERGENCIA
             $table->string('name');
             $table->string('address');
             $table->string('mobile');
             $table->string('email');
             $table->string('vehicle_registration');
-            $table->string('contact');
+            $table->string('contact'); //EMERGENCIA
+            $table->string('phone'); //EMERGENCIA
             $table->date('start_date');
             $table->boolean('vehicle')->default(false);
+            // JOBS X STAFF
+            // JOBS X ARCHIVOS
+            $table->softDeletes();
             $table->timestamps();
         });
     }

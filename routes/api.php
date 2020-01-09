@@ -28,6 +28,25 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
+Route::group([
+    'middleware' => 'auth:api',
+    'prefix' => 'job'
+], function () {
+    Route::post('create', 'JobController@store');
+    Route::post('edit', 'JobController@update');
+    Route::get('show/{token}', 'JobController@show');
+});
+
+Route::group([
+    'middleware' => 'auth:api',
+    'prefix' => 'staff'
+], function () {
+    Route::post('create', 'StaffController@store');
+    Route::post('edit', 'StaffController@update');
+    Route::get('show/{token}', 'StaffController@show');
+});
+
+
 Route::group([    
     'namespace' => 'Auth',    
     'middleware' => 'api',    
