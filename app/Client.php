@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Client extends Model
 {
     protected $fillable = [
-        'fechas','phone','status'
+       'name','phone','contact_name','since_date','status',
     ];
+
+    public function lastjob(){
+        return $this->belongsTo('App\Job','id_lastjob');
+    }
 }

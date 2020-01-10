@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Staff extends Model
 {
     protected $fillable = [
-        'fechas','phone','status'
+        'relationship','name','address','mobile','email','vehicle_registration','contact','phone','start_date','vehicle',
     ];
 
     public function jobs(){
