@@ -33,8 +33,10 @@ Route::group([
     'prefix' => 'job'
 ], function () {
     Route::post('create', 'JobController@store');
-    Route::post('edit', 'JobController@update');
-    Route::get('show/{token}', 'JobController@show');
+    Route::post('edit/{id}', 'JobController@update');
+    Route::get('delete/{id}', 'JobController@destroy');
+    Route::get('show/{id}', 'JobController@show');
+    Route::get('list', 'JobController@index');
 });
 
 Route::group([
@@ -42,8 +44,9 @@ Route::group([
     'prefix' => 'staff'
 ], function () {
     Route::post('create', 'StaffController@store');
-    Route::post('edit', 'StaffController@update');
-    Route::get('show/{token}', 'StaffController@show');
+    Route::post('edit/{id}', 'StaffController@update');
+    Route::get('show/{id}', 'StaffController@show');
+    Route::get('list', 'StaffController@index');
 });
 
 

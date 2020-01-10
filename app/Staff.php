@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Staff extends Model
 {
+    use HasApiTokens,Notifiable,SoftDeletes;
+    
     protected $fillable = [
         'relationship','name','address','mobile','email','vehicle_registration','contact','phone','start_date','vehicle',
     ];

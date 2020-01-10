@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Client extends Model
 {
+    use HasApiTokens,Notifiable,SoftDeletes;
+    
     protected $fillable = [
        'name','phone','contact_name','since_date','status',
     ];

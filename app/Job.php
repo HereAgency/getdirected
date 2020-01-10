@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Job extends Model
 {
+    use HasApiTokens,Notifiable,SoftDeletes;
+    
     protected $fillable = [
         'job_type','shift_type','number_utes','number_trafic','address','location','setup_required','notes','date','time_start','status','tbc',
     ];

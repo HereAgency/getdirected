@@ -17,6 +17,9 @@ class AuthController extends Controller
             'email'     => 'required|string|email|unique:users',
             'password'  => 'required|string|confirmed',
         ]);
+
+        // Chequear si hay permits o tgs, crearlos y asignarlos
+
         $user = new User([
             'name'              => $request->name,
             'email'             => $request->email,
@@ -28,7 +31,7 @@ class AuthController extends Controller
         $avatar = Avatar::create($user->name)->getImageObject()->encode('png');
         Storage::put('avatars/'.$user->id.'/avatar.png', (string) $avatar);
         
-        $user->notify(new SignupActivate($user));
+        // AGREGAR EN PRODUCCION $user->notify(new \App\Notifications\SignupActivate($user));
         
         return response()->json(['message' => 'Usuario creado existosamente!'], 201);
     }
