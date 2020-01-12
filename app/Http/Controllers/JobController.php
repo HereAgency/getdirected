@@ -70,6 +70,62 @@ class JobController extends Controller
             'tbc'              => $request->tbc,
         ]);
         $job->save();
+
+        foreach ($request->staffs as $value) {
+            $pedido->staffs()->attach($value);
+        }
+
+        if($request->hasFile('permits')){ 
+            
+            $files = $request->file('permits'); 
+
+            foreach ($files as $file) {
+
+                $fileName = str_random(20).'.'.$file->getClientOriginalExtension();
+
+                $path = str_replace('\\', '/', base_path() . '/public/permits/');
+
+                $file->move($path, $fileName);
+
+                $archivo = new Archivo();
+
+                // $archivo->path = $path.$fileName;
+                $archivo->path = '/permits/'.$fileName;
+
+                $archivo->save();
+
+                $job->permits()->save($archivo); // OR ASOCIATE
+
+            }
+
+        }
+
+        if($request->hasFile('tgs')){ 
+            
+            $files = $request->file('tgs'); 
+
+            foreach ($files as $file) {
+
+                $fileName = str_random(20).'.'.$file->getClientOriginalExtension();
+
+                $path = str_replace('\\', '/', base_path() . '/public/tgs/');
+
+                $file->move($path, $fileName);
+
+                $archivo = new Archivo();
+
+                // $archivo->path = $path.$fileName;
+                $archivo->path = '/tgs/'.$fileName;
+
+                $archivo->save();
+
+                $job->tgs()->save($archivo); // OR ASOCIATE
+
+            }
+
+        }
+
+        $job->save();
         
         return response()->json(['message' => 'Job creado existosamente!'], 201);
     }
@@ -155,29 +211,63 @@ class JobController extends Controller
 
         $job->save();
 
-        /*if($request->hasFile('documento')){
-            if (isset($user->documento->path)){
-                unlink(base_path().'/public'.$user->documento->path);
-                $user->documento()->delete();
-            }
+        // ADAPTAR ESTA PARTE A UPDATE
+
+        foreach ($request->staffs as $value) { // DIFERENCIA ENTRE ACTUAL Y NUEVO
+            $pedido->staffs()->attach($value);
+        }
+
+        if($request->hasFile('permits')){ 
             
-            $image = $request->file('documento'); 
+            $files = $request->file('permits'); 
 
-            $imageName = $user->id.'.'.$image->getClientOriginalExtension();
+            foreach ($files as $file) {
 
-            $path = str_replace('\\', '/', base_path() . '/public/documents/');
+                $fileName = str_random(20).'.'.$file->getClientOriginalExtension();
 
-            $image->move($path, $imageName);
+                $path = str_replace('\\', '/', base_path() . '/public/permits/');
 
-            $archivo = new Archivo();
+                $file->move($path, $fileName);
 
-            // $archivo->path = $path.$imageName;
-            $archivo->path = '/documents/'.$imageName;
+                $archivo = new Archivo();
 
-            $archivo->save();
+                // $archivo->path = $path.$fileName;
+                $archivo->path = '/permits/'.$fileName;
 
-            $user->documento()->associate($archivo);
-        }*/
+                $archivo->save();
+
+                $job->permits()->save($archivo); // OR ASOCIATE
+
+            }
+
+        }
+
+        if($request->hasFile('tgs')){ 
+            
+            $files = $request->file('tgs'); 
+
+            foreach ($files as $file) {
+
+                $fileName = str_random(20).'.'.$file->getClientOriginalExtension();
+
+                $path = str_replace('\\', '/', base_path() . '/public/tgs/');
+
+                $file->move($path, $fileName);
+
+                $archivo = new Archivo();
+
+                // $archivo->path = $path.$fileName;
+                $archivo->path = '/tgs/'.$fileName;
+
+                $archivo->save();
+
+                $job->tgs()->save($archivo); // OR ASOCIATE
+
+            }
+
+        }
+
+        $job->save();
 
         return response()->json(['message' => 'Job editado existosamente!'], 201);
     }
@@ -190,7 +280,7 @@ class JobController extends Controller
      */
     public function destroy($id)
     {
-        $job = App\Flight::find($id);
+        $job = App\Job::find($id);
         $job->delete();
 
         return response()->json(['message' => 'Job borrado existosamente!'], 201);
