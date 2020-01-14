@@ -177,6 +177,8 @@ class JobController extends Controller
             'status'      => 'required|integer',
             'tbc'      => 'required|boolean',
             'client'      => 'required|integer',
+            'del_per.*'      => 'required|integer', // ARRAY DE PERMITS ELIMINADOS
+            'del_tgs.*'      => 'required|integer', // ARRAY DE TGS ELIMINADOS
             'staffs.*'      => 'required|integer', // ARRAY DE STAFFS
             'permits.*'      => 'required|max:2048', //ARRAY DE ARCHIVOS
             'tgs.*'      => 'required|max:2048', //ARRAY DE ARCHIVOS

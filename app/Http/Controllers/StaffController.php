@@ -163,40 +163,88 @@ class StaffController extends Controller
             'phone'     => 'required|string',
             'start_date'        => 'required|date',
             'vehicle'       => 'required|boolean',
+            'del_tca.*'      => 'required|integer', // ARRAY DE TCA ELIMINADOS
+            'del_tfn.*'      => 'required|integer', // ARRAY DE TFN ELIMINADOS
             'tcas.*'      => 'required|max:2048', //ARRAY DE ARCHIVOS
             'tfns.*'      => 'required|max:2048', //ARRAY DE ARCHIVOS
         ]);
         
         $staff = App\Staff::findOrFail($id);
 
-        if(isset($request->job_type))
-            $staff->job_type = $request->job_type;
+        if(isset($request->relationship))
+            $staff->relationship = $request->relationship;
+        if(isset($request->name))
+            $staff->name = $request->name;
+        if(isset($request->address))
+            $staff->address = $request->address;
+        if(isset($request->mobile))
+            $staff->mobile = $request->mobile;
+        if(isset($request->email))
+            $staff->email = $request->email;
+        if(isset($request->vehicle_registration))
+            $staff->vehicle_registration = $request->vehicle_registration;
+        if(isset($request->contact))
+            $staff->contact = $request->contact;
+        if(isset($request->phone))
+            $staff->phone = $request->phone;
+        if(isset($request->start_date))
+            $staff->start_date = $request->start_date;
+        if(isset($request->vehicle))
+            $staff->vehicle = $request->vehicle;
 
         $staff->save();
 
-        /*if($request->hasFile('documento')){
-            if (isset($user->documento->path)){
-                unlink(base_path().'/public'.$user->documento->path);
-                $user->documento()->delete();
-            }
+        if($request->hasFile('tcas')){ 
             
-            $image = $request->file('documento'); 
+            $files = $request->file('tcas'); 
 
-            $imageName = $user->id.'.'.$image->getClientOriginalExtension();
+            foreach ($files as $file) {
 
-            $path = str_replace('\\', '/', base_path() . '/public/documents/');
+                $fileName = str_random(20).'.'.$file->getClientOriginalExtension();
 
-            $image->move($path, $imageName);
+                $path = str_replace('\\', '/', base_path() . '/public/tcas/');
 
-            $archivo = new Archivo();
+                $file->move($path, $fileName);
 
-            // $archivo->path = $path.$imageName;
-            $archivo->path = '/documents/'.$imageName;
+                $archivo = new Archivo();
 
-            $archivo->save();
+                // $archivo->path = $path.$fileName;
+                $archivo->path = '/tcas/'.$fileName;
 
-            $user->documento()->associate($archivo);
-        }*/
+                $archivo->save();
+
+                $staff->tcas()->save($archivo); // OR ASOCIATE
+
+            }
+
+        }
+
+        if($request->hasFile('tfns')){ 
+            
+            $files = $request->file('tfns'); 
+
+            foreach ($files as $file) {
+
+                $fileName = str_random(20).'.'.$file->getClientOriginalExtension();
+
+                $path = str_replace('\\', '/', base_path() . '/public/tfns/');
+
+                $file->move($path, $fileName);
+
+                $archivo = new Archivo();
+
+                // $archivo->path = $path.$fileName;
+                $archivo->path = '/tfns/'.$fileName;
+
+                $archivo->save();
+
+                $staff->tfns()->save($archivo); // OR ASOCIATE
+
+            }
+
+        }
+
+        $staff->save();
 
         return response()->json(['message' => 'Staff editado existosamente!'], 201);
     }
