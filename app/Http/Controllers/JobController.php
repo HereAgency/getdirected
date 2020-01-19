@@ -13,7 +13,16 @@ class JobController extends Controller
      */
     public function index()
     {
-        $jobs = App\Job::all()->paginate(15);
+        if(isset($_GET['start']) && !isset($_GET['end'])){
+            $from = date($_GET['start']);
+            $jobs = App\Job::where('date', $from)->get()->paginate(15);
+        }elseif(isset($_GET['start']) && isset($_GET['end'])){
+            $from = date($_GET['start']);
+            $to = date($_GET['end']);
+            $jobs = App\Job::whereBetween('date', [$from, $to])->get()->paginate(15);
+        }else{
+            $jobs = App\Job::all()->paginate(15);
+        }
 
         return response()->json(['response' => 'success', 'jobs' => $jobs]);
     }
@@ -272,6 +281,29 @@ class JobController extends Controller
         $job->save();
 
         return response()->json(['message' => 'Job editado existosamente!'], 201);
+    }
+
+    /**
+     * Cambiar solo el estado.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function estado(Request $request, $id)
+    {
+        $request->validate([
+            'status'      => 'required|integer'
+        ]);
+        
+        $job = App\Job::findOrFail($id);
+
+        if(isset($request->status))
+            $job->status = $request->status;
+
+        $job->save();
+
+        return response()->json(['message' => 'Estado cambiado existosamente!'], 201);
     }
 
     /**

@@ -34,6 +34,7 @@ Route::group([
 ], function () {
     Route::post('create', 'JobController@store');
     Route::post('edit/{id}', 'JobController@update');
+    Route::post('status/{id}', 'JobController@estado');
     Route::get('delete/{id}', 'JobController@destroy');
     Route::get('show/{id}', 'JobController@show');
     Route::get('list', 'JobController@index');
@@ -45,6 +46,7 @@ Route::group([
 ], function () {
     Route::post('create', 'StaffController@store');
     Route::post('edit/{id}', 'StaffController@update');
+    Route::get('delete/{id}', 'StaffController@destroy');
     Route::get('show/{id}', 'StaffController@show');
     Route::get('list', 'StaffController@index');
 });

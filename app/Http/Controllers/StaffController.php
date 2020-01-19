@@ -163,10 +163,10 @@ class StaffController extends Controller
             'phone'     => 'required|string',
             'start_date'        => 'required|date',
             'vehicle'       => 'required|boolean',
-            'del_tca.*'      => 'required|integer', // ARRAY DE TCA ELIMINADOS
-            'del_tfn.*'      => 'required|integer', // ARRAY DE TFN ELIMINADOS
-            'tcas.*'      => 'required|max:2048', //ARRAY DE ARCHIVOS
-            'tfns.*'      => 'required|max:2048', //ARRAY DE ARCHIVOS
+            'del_tca.*'      => 'required|integer', // ARRAY DE IDs TCA ELIMINADOS
+            'del_tfn.*'      => 'required|integer', // ARRAY DE IDs TFN ELIMINADOS
+            'tcas.*'      => 'required|max:2048', //ARRAY DE ARCHIVOS NUEVOS
+            'tfns.*'      => 'required|max:2048', //ARRAY DE ARCHIVOS NUEVOSs
         ]);
         
         $staff = App\Staff::findOrFail($id);
