@@ -51,6 +51,17 @@ Route::group([
     Route::get('list', 'StaffController@index');
 });
 
+Route::group([
+    'middleware' => 'auth:api',
+    'prefix' => 'client'
+], function () {
+    Route::post('create', 'ClientController@store');
+    Route::post('edit/{id}', 'ClientController@update');
+    Route::get('delete/{id}', 'ClientController@destroy');
+    Route::get('show/{id}', 'ClientController@show');
+    Route::get('list', 'ClientController@index');
+});
+
 
 Route::group([    
     'namespace' => 'Auth',    

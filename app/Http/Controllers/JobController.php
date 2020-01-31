@@ -15,13 +15,13 @@ class JobController extends Controller
     {
         if(isset($_GET['start']) && !isset($_GET['end'])){
             $from = date($_GET['start']);
-            $jobs = App\Job::where('date', $from)->get()->paginate(15);
+            $jobs = \App\Job::where('date', $from)->get()->paginate(15);
         }elseif(isset($_GET['start']) && isset($_GET['end'])){
             $from = date($_GET['start']);
             $to = date($_GET['end']);
-            $jobs = App\Job::whereBetween('date', [$from, $to])->get()->paginate(15);
+            $jobs = \App\Job::whereBetween('date', [$from, $to])->get()->paginate(15);
         }else{
-            $jobs = App\Job::all()->paginate(15);
+            $jobs = \App\Job::where('id', '>', 0)->paginate(15);
         }
 
         return response()->json(['response' => 'success', 'jobs' => $jobs]);
@@ -147,7 +147,7 @@ class JobController extends Controller
      */
     public function show($id)
     {
-        $job = App\Job::findOrFail($id);
+        $job = \App\Job::findOrFail($id);
 
         return response()->json(['response' => 'success', 'job' => $job]);
     }
@@ -193,7 +193,7 @@ class JobController extends Controller
             'tgs.*'      => 'required|max:2048', //ARRAY DE ARCHIVOS
         ]);
         
-        $job = App\Job::findOrFail($id);
+        $job = \App\Job::findOrFail($id);
 
         if(isset($request->job_type))
             $job->job_type = $request->job_type;
@@ -296,7 +296,7 @@ class JobController extends Controller
             'status'      => 'required|integer'
         ]);
         
-        $job = App\Job::findOrFail($id);
+        $job = \App\Job::findOrFail($id);
 
         if(isset($request->status))
             $job->status = $request->status;
@@ -314,7 +314,7 @@ class JobController extends Controller
      */
     public function destroy($id)
     {
-        $job = App\Job::find($id);
+        $job = \App\Job::find($id);
         $job->delete();
 
         return response()->json(['message' => 'Job borrado existosamente!'], 201);

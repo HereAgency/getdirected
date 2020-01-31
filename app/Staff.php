@@ -2,7 +2,10 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Passport\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 
 class Staff extends Model
 {

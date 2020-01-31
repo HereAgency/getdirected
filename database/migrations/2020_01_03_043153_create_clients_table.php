@@ -17,6 +17,9 @@ class CreateClientsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('id_lastjob');
             $table->string('name');
+            $table->string('address');
+            $table->string('mobile');
+            $table->string('email');
             $table->string('phone');
             $table->string('contact_name');
             $table->date('since_date');

@@ -13,7 +13,7 @@ class StaffController extends Controller
      */
     public function index()
     {
-        $staffs = App\Staff::all()->paginate(15);
+        $staffs = \App\Staff::where('id', '>', 0)->paginate(15);
 
         return response()->json(['response' => 'success', 'staffs' => $staffs]);    }
 
@@ -127,7 +127,7 @@ class StaffController extends Controller
      */
     public function show($id)
     {
-        $staff = App\Staff::findOrFail($id);
+        $staff = \App\Staff::findOrFail($id);
 
         return response()->json(['response' => 'success', 'job' => $staff]);
     }
@@ -169,7 +169,7 @@ class StaffController extends Controller
             'tfns.*'      => 'required|max:2048', //ARRAY DE ARCHIVOS NUEVOSs
         ]);
         
-        $staff = App\Staff::findOrFail($id);
+        $staff = \App\Staff::findOrFail($id);
 
         if(isset($request->relationship))
             $staff->relationship = $request->relationship;
@@ -257,7 +257,7 @@ class StaffController extends Controller
      */
     public function destroy($id)
     {
-        $staff = App\Staff::find($id);
+        $staff = \App\Staff::find($id);
         $staff->delete();
 
         return response()->json(['message' => 'Staff borrado existosamente!'], 201);
