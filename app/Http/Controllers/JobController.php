@@ -13,16 +13,28 @@ class JobController extends Controller
      */
     public function index()
     {
+        $jobs = \App\Job::where('id', '>', 0);
+
         if(isset($_GET['start']) && !isset($_GET['end'])){
             $from = date($_GET['start']);
-            $jobs = \App\Job::where('date', $from)->get()->paginate(15);
+            $jobs = $jobs->where('date', $from);
         }elseif(isset($_GET['start']) && isset($_GET['end'])){
             $from = date($_GET['start']);
             $to = date($_GET['end']);
-            $jobs = \App\Job::whereBetween('date', [$from, $to])->get()->paginate(15);
-        }else{
-            $jobs = \App\Job::where('id', '>', 0)->paginate(15);
+            $jobs = $jobs->whereBetween('date', [$from, $to]);
         }
+
+        if(isset($_GET['status'])){
+            $jobs = $jobs->where('status',$_GET['status']);
+        }
+
+        if(isset($_GET['staff'])){
+            $jobs = $jobs->whereHas('staffs', function($q) {
+                $q->where('staff_id', $_GET['staff']);
+            });
+        }
+
+        $jobs = $jobs->paginate(15);
 
         return response()->json(['response' => 'success', 'jobs' => $jobs]);
     }
