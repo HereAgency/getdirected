@@ -15,7 +15,7 @@ class CreateJobsTable extends Migration
     {
         Schema::create('jobs', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('id_client');
+            $table->integer('id_client')->default(0);
             $table->integer('job_type');
             $table->integer('shift_type');
             $table->integer('number_utes');

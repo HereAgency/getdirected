@@ -46,7 +46,7 @@ class ClientController extends Controller
             'status'      => 'required|integer',
         ]);
 
-        $client = new Job([
+        $client = new \App\Client([
             'name'  => $request->name,
             'address'  => $request->address,
             'mobile'  => $request->mobile,
@@ -71,7 +71,7 @@ class ClientController extends Controller
     {
         $client = \App\Client::findOrFail($id);
 
-        return response()->json(['response' => 'success', 'job' => $client]);
+        return response()->json(['response' => 'success', 'client' => $client]);
     }
 
     /**

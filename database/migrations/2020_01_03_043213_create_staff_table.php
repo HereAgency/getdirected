@@ -15,7 +15,8 @@ class CreateStaffTable extends Migration
     {
         Schema::create('staff', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('relationship'); //EMERGENCIA
+            $table->integer('relationship')->nullable(); //EMERGENCIA
+            $table->integer('id_user')->nullable();
             $table->string('name');
             $table->string('address');
             $table->string('mobile');

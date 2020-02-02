@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class StaffController extends Controller
 {
@@ -27,6 +29,47 @@ class StaffController extends Controller
         //
     }
 
+    public function login(Request $request)
+    {
+        $request->validate([
+            'phone'       => 'required|string',
+            'password'    => 'required|string',
+            'remember_me' => 'boolean',
+        ]);
+
+        $staff = \App\Staff::where('phone', $request->phone)->first();
+
+        if ($staff):           
+
+        $credentials = request(['password']);
+        $credentials['active'] = 1;
+        $credentials['email'] = $staff->user->email;
+        $credentials['deleted_at'] = null;
+        
+        if (!Auth::attempt($credentials)) {
+            return response()->json(['message' => 'No Autorizado'], 401);
+        }
+
+        $user = $staff->user;
+        $tokenResult = $user->createToken('Token Acceso Personal');
+        $token = $tokenResult->token;
+        if ($request->remember_me) {
+            $token->expires_at = Carbon::now()->addWeeks(1);
+        }
+        $token->save();
+        return response()->json([
+            'access_token' => $tokenResult->accessToken,
+            'token_type'   => 'Bearer',
+            'expires_at'   => Carbon::parse($tokenResult->token->expires_at)->toDateTimeString(),
+        ]);
+
+        else:
+
+            return response()->json(['message' => 'No Autorizado'], 401);
+
+        endif;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -36,7 +79,7 @@ class StaffController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'relationship'      => 'required|integer',
+         //   'relationship'      => 'required|integer',
             'name'      => 'required|string',
             'address'       => 'required|string',
             'mobile'        => 'required|string',
@@ -50,8 +93,8 @@ class StaffController extends Controller
             'tfns.*'      => 'required|max:2048', //ARRAY DE ARCHIVOS
         ]);
 
-        $staff = new Job([
-            'relationship'  => $request->relationship,
+        $staff = new \App\Staff([
+         //   'relationship'  => $request->relationship,
             'name'  => $request->name,
             'address'  => $request->address,
             'mobile'  => $request->mobile,
@@ -63,6 +106,18 @@ class StaffController extends Controller
             'vehicle'  => $request->vehicle,
         ]);
         $staff->save();
+
+        $user = new \App\User([
+            'name'              => $request->name,
+            'email'             => $request->email,
+            'password'          => bcrypt($request->phone),
+            'activation_token'  => str_random(60),
+            'active'  => true,
+            'type'  => 1,
+        ]);
+        $user->save();
+
+        $staff->user()->associate($user);
 
         if($request->hasFile('tcas')){ 
             
@@ -129,7 +184,7 @@ class StaffController extends Controller
     {
         $staff = \App\Staff::findOrFail($id);
 
-        return response()->json(['response' => 'success', 'job' => $staff]);
+        return response()->json(['response' => 'success', 'staff' => $staff]);
     }
 
     /**
@@ -153,7 +208,7 @@ class StaffController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'relationship'      => 'required|integer',
+         //   'relationship'      => 'required|integer',
             'name'      => 'required|string',
             'address'       => 'required|string',
             'mobile'        => 'required|string',
@@ -171,8 +226,8 @@ class StaffController extends Controller
         
         $staff = \App\Staff::findOrFail($id);
 
-        if(isset($request->relationship))
-            $staff->relationship = $request->relationship;
+        /*if(isset($request->relationship))
+            $staff->relationship = $request->relationship;*/
         if(isset($request->name))
             $staff->name = $request->name;
         if(isset($request->address))

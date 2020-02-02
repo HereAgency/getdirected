@@ -26,4 +26,8 @@ class Staff extends Model
     public function tfns(){
         return $this->belongsToMany('App\Archivo', 'staff_tfn', 'staff_id', 'archivo_id');
     }
+
+    public function user(){
+        return $this->belongsTo('App\User','id_user');
+    }
 }

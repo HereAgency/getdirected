@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class JobController extends Controller
 {
@@ -26,6 +27,12 @@ class JobController extends Controller
 
         if(isset($_GET['status'])){
             $jobs = $jobs->where('status',$_GET['status']);
+        }
+
+        if(Auth::user()->type == 1){
+            $jobs = $jobs->whereHas('staffs', function($q) {
+                $q->where('id_user', Auth::user()->id);
+            });
         }
 
         if(isset($_GET['staff'])){
@@ -76,7 +83,7 @@ class JobController extends Controller
             'tgs.*'      => 'required|max:2048', //ARRAY DE ARCHIVOS
         ]);
 
-        $job = new Job([
+        $job = new \App\Job([
             'job_type'              => $request->job_type,
             'shift_type'              => $request->shift_type,
             'number_utes'              => $request->number_utes,
@@ -92,8 +99,16 @@ class JobController extends Controller
         ]);
         $job->save();
 
-        foreach ($request->staffs as $value) {
-            $pedido->staffs()->attach($value);
+        if(isset($request->staffs)){
+            foreach ($request->staffs as $value) {
+                $staff = \App\Staff::findOrFail($value);
+                $job->staffs()->save($staff);
+            }
+        }
+        
+        if(isset($request->client)){
+            $client = \App\Client::findOrFail($request->client);
+            $job->client()->associate($client);
         }
 
         if($request->hasFile('permits')){ 

@@ -25,6 +25,7 @@ class AuthController extends Controller
             'email'             => $request->email,
             'password'          => bcrypt($request->password),
             'activation_token'  => str_random(60),
+            'active'  => true,
         ]);
         $user->save();
 
