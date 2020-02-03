@@ -73,6 +73,10 @@ class JobController extends Controller
             'location'      => 'required|string',
             'setup_required'      => 'required|string',
             'notes'      => 'required|string',
+            'gtdc'      => 'required|string',
+            'booking_name'      => 'required|string',
+            'contact_number'      => 'required|string',
+            'time_req_site'      => 'required|string',
             'date'      => 'required|date',
             'time_start'      => 'required|date',
             'status'      => 'required|integer',
@@ -92,6 +96,10 @@ class JobController extends Controller
             'location'              => $request->location,
             'setup_required'              => $request->setup_required,
             'notes'              => $request->notes,
+            'gtdc'              => $request->gtdc,
+            'booking_name'              => $request->booking_name,
+            'contact_number'              => $request->contact_number,
+            'time_req_site'              => $request->time_req_site,
             'date'              => $request->date,
             'time_start'              => $request->time_start,
             'status'              => $request->status,
@@ -200,24 +208,28 @@ class JobController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'job_type'      => 'required|integer',
-            'shift_type'      => 'required|integer',
-            'number_utes'      => 'required|integer',
-            'number_trafic'      => 'required|integer',
-            'address'      => 'required|string',
-            'location'      => 'required|string',
-            'setup_required'      => 'required|string',
-            'notes'      => 'required|string',
-            'date'      => 'required|date',
-            'time_start'      => 'required|date',
-            'status'      => 'required|integer',
-            'tbc'      => 'required|boolean',
-            'client'      => 'required|integer',
-            'del_per.*'      => 'required|integer', // ARRAY DE PERMITS ELIMINADOS
-            'del_tgs.*'      => 'required|integer', // ARRAY DE TGS ELIMINADOS
-            'staffs.*'      => 'required|integer', // ARRAY DE STAFFS
-            'permits.*'      => 'required|max:2048', //ARRAY DE ARCHIVOS
-            'tgs.*'      => 'required|max:2048', //ARRAY DE ARCHIVOS
+            'job_type'      => 'integer',
+            'shift_type'      => 'integer',
+            'number_utes'      => 'integer',
+            'number_trafic'      => 'integer',
+            'address'      => 'string',
+            'location'      => 'string',
+            'setup_required'      => 'string',
+            'notes'      => 'string',
+            'gtdc'      => 'string',
+            'booking_name'      => 'string',
+            'contact_number'      => 'string',
+            'time_req_site'      => 'string',
+            'date'      => 'date',
+            'time_start'      => 'date',
+            'status'      => 'integer',
+            'tbc'      => 'boolean',
+            'client'      => 'integer',
+            'del_per.*'      => 'integer', // ARRAY DE PERMITS ELIMINADOS
+            'del_tgs.*'      => 'integer', // ARRAY DE TGS ELIMINADOS
+            'staffs.*'      => 'integer', // ARRAY DE STAFFS
+            'permits.*'      => 'max:2048', //ARRAY DE ARCHIVOS
+            'tgs.*'      => 'max:2048', //ARRAY DE ARCHIVOS
         ]);
         
         $job = \App\Job::findOrFail($id);
@@ -251,8 +263,11 @@ class JobController extends Controller
 
         // ADAPTAR ESTA PARTE A UPDATE
 
-        foreach ($request->staffs as $value) { // DIFERENCIA ENTRE ACTUAL Y NUEVO
-            $pedido->staffs()->attach($value);
+        if(isset($request->staffs)){
+            foreach ($request->staffs as $value) { // DIFERENCIA ENTRE ACTUAL Y NUEVO
+                $staff = \App\Staff::findOrFail($value);
+                $job->staffs()->save($staff);
+            }
         }
 
         if($request->hasFile('permits')){ 

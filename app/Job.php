@@ -12,7 +12,7 @@ class Job extends Model
     use HasApiTokens,Notifiable,SoftDeletes;
     
     protected $fillable = [
-        'job_type','shift_type','number_utes','number_trafic','address','location','setup_required','notes','date','time_start','status','tbc',
+        'job_type','shift_type','number_utes','number_trafic','address','location','setup_required','notes','gtdc','booking_name','contact_number','time_req_site','date','time_start','status','tbc',
     ];
 
     public function staffs(){

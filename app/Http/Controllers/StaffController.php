@@ -208,20 +208,20 @@ class StaffController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-         //   'relationship'      => 'required|integer',
-            'name'      => 'required|string',
-            'address'       => 'required|string',
-            'mobile'        => 'required|string',
-            'email'     => 'required|string',
-            'vehicle_registration'      => 'required|string',
-            'contact'       => 'required|string',
-            'phone'     => 'required|string',
-            'start_date'        => 'required|date',
-            'vehicle'       => 'required|boolean',
-            'del_tca.*'      => 'required|integer', // ARRAY DE IDs TCA ELIMINADOS
-            'del_tfn.*'      => 'required|integer', // ARRAY DE IDs TFN ELIMINADOS
-            'tcas.*'      => 'required|max:2048', //ARRAY DE ARCHIVOS NUEVOS
-            'tfns.*'      => 'required|max:2048', //ARRAY DE ARCHIVOS NUEVOSs
+         //   'relationship'      => 'integer',
+            'name'      => 'string',
+            'address'       => 'string',
+            'mobile'        => 'string',
+            'email'     => 'string',
+            'vehicle_registration'      => 'string',
+            'contact'       => 'string',
+            'phone'     => 'string',
+            'start_date'        => 'date',
+            'vehicle'       => 'boolean',
+            'del_tca.*'      => 'integer', // ARRAY DE IDs TCA ELIMINADOS
+            'del_tfn.*'      => 'integer', // ARRAY DE IDs TFN ELIMINADOS
+            'tcas.*'      => 'max:2048', //ARRAY DE ARCHIVOS NUEVOS
+            'tfns.*'      => 'max:2048', //ARRAY DE ARCHIVOS NUEVOSs
         ]);
         
         $staff = \App\Staff::findOrFail($id);

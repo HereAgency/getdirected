@@ -24,6 +24,10 @@ class CreateJobsTable extends Migration
             $table->string('location');
             $table->string('setup_required');
             $table->string('notes');
+            $table->string('gtdc');
+            $table->string('booking_name');
+            $table->string('contact_number');
+            $table->string('time_req_site');
             $table->date('date');
             $table->date('time_start');
             $table->integer('status')->default(0);
