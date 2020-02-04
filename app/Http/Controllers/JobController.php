@@ -65,46 +65,64 @@ class JobController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'job_type'      => 'required|integer',
-            'shift_type'      => 'required|integer',
-            'number_utes'      => 'required|integer',
-            'number_trafic'      => 'required|integer',
-            'address'      => 'required|string',
-            'location'      => 'required|string',
-            'setup_required'      => 'required|string',
-            'notes'      => 'required|string',
-            'gtdc'      => 'required|string',
-            'booking_name'      => 'required|string',
-            'contact_number'      => 'required|string',
-            'time_req_site'      => 'required|string',
-            'date'      => 'required|date',
+            'job_type'      => 'integer',
+            'shift_type'      => 'integer',
+            'number_utes'      => 'integer',
+            'number_trafic'      => 'integer',
+            'address'      => 'string',
+            'location'      => 'string',
+            'setup_required'      => 'string',
+            'notes'      => 'string',
+            'gtdc'      => 'string',
+            'booking_name'      => 'string',
+            'contact_number'      => 'string',
+            'time_req_site'      => 'string',
+            'date'      => 'date',
             'time_start'      => 'required|date',
-            'status'      => 'required|integer',
-            'tbc'      => 'required|boolean',
-            'client'      => 'required|integer',
-            'staffs.*'      => 'required|integer', // ARRAY DE STAFFS
-            'permits.*'      => 'required|max:2048', //ARRAY DE ARCHIVOS
-            'tgs.*'      => 'required|max:2048', //ARRAY DE ARCHIVOS
+            'status'      => 'integer',
+            'tbc'      => 'boolean',
+            'client'      => 'integer',
+            'staffs.*'      => 'integer', // ARRAY DE STAFFS
+            'permits.*'      => 'max:2048', //ARRAY DE ARCHIVOS
+            'tgs.*'      => 'max:2048', //ARRAY DE ARCHIVOS
         ]);
 
-        $job = new \App\Job([
-            'job_type'              => $request->job_type,
-            'shift_type'              => $request->shift_type,
-            'number_utes'              => $request->number_utes,
-            'number_trafic'              => $request->number_trafic,
-            'address'              => $request->address,
-            'location'              => $request->location,
-            'setup_required'              => $request->setup_required,
-            'notes'              => $request->notes,
-            'gtdc'              => $request->gtdc,
-            'booking_name'              => $request->booking_name,
-            'contact_number'              => $request->contact_number,
-            'time_req_site'              => $request->time_req_site,
-            'date'              => $request->date,
+        $args = [
             'time_start'              => $request->time_start,
-            'status'              => $request->status,
-            'tbc'              => $request->tbc,
-        ]);
+        ];
+
+        if(isset($request->job_type))
+            $args['job_type'] = $request->job_type;
+        if(isset($request->shift_type))
+            $args['shift_type'] = $request->shift_type;
+        if(isset($request->number_utes))
+            $args['number_utes'] = $request->number_utes;
+        if(isset($request->number_trafic))
+            $args['number_trafic'] = $request->number_trafic;
+        if(isset($request->address))
+            $args['address'] = $request->address;
+        if(isset($request->location))
+            $args['location'] = $request->location;
+        if(isset($request->setup_required))
+            $args['setup_required'] = $request->setup_required;
+        if(isset($request->notes))
+            $args['notes'] = $request->notes;
+        if(isset($request->gtdc))
+            $args['gtdc'] = $request->gtdc;
+        if(isset($request->booking_name))
+            $args['booking_name'] = $request->booking_name;
+        if(isset($request->contact_number))
+            $args['contact_number'] = $request->contact_number;
+        if(isset($request->time_req_site))
+            $args['time_req_site'] = $request->time_req_site;
+        if(isset($request->date))
+            $args['date'] = $request->date;
+        if(isset($request->status))
+            $args['status'] = $request->status;
+        if(isset($request->tbc))
+            $args['tbc'] = $request->tbc;
+
+        $job = new \App\Job($args);
         $job->save();
 
         if(isset($request->staffs)){
