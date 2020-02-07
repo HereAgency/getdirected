@@ -76,6 +76,21 @@ class StaffController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function check_email(Request $request)
+    {
+        $request->validate([
+            'email'      => 'required|string|email|unique:users'
+        ]);
+
+        return response()->json(['message' => 'Email Disponible!'], 201);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
         $request->validate([

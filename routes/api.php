@@ -17,7 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['middleware' => 'cors','prefix' => 'auth'], function () {
+Route::group(['prefix' => 'auth'], function () {
     Route::post('login', 'AuthController@login');
     Route::post('login/staff', 'StaffController@login');
     Route::post('signup', 'AuthController@signup');
@@ -46,6 +46,7 @@ Route::group([
     'prefix' => 'staff'
 ], function () {
     Route::post('create', 'StaffController@store');
+    Route::post('check', 'StaffController@check_email');
     Route::post('edit/{id}', 'StaffController@update');
     Route::get('delete/{id}', 'StaffController@destroy');
     Route::get('show/{id}', 'StaffController@show');

@@ -17,6 +17,7 @@ class CreateJobStaffTable extends Migration
             $table->bigIncrements('id');
             $table->integer('job_id');
             $table->integer('staff_id');
+            $table->boolean('confirm')->default(false);
             //$table->timestamps();
         });
     }

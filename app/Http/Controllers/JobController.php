@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class JobController extends Controller
 {
@@ -14,7 +15,7 @@ class JobController extends Controller
      */
     public function index()
     {
-        $jobs = \App\Job::where('id', '>', 0);
+        $jobs = \App\Job::where('jobs.id', '>', 0);
 
         if(isset($_GET['start']) && !isset($_GET['end'])){
             $from = date($_GET['start']);
@@ -38,6 +39,12 @@ class JobController extends Controller
         if(isset($_GET['staff'])){
             $jobs = $jobs->whereHas('staffs', function($q) {
                 $q->where('staff_id', $_GET['staff']);
+            });
+        }
+
+        if(Auth::user()->type == 1){
+            $jobs = $jobs->join('job_staff', 'job_staff.job_id', '=', 'jobs.id')->whereHas('staffs', function($q) {
+                $q->where('id_user', Auth::user()->id);
             });
         }
 
@@ -200,7 +207,15 @@ class JobController extends Controller
      */
     public function show($id)
     {
-        $job = \App\Job::findOrFail($id);
+        if(Auth::user()->type == 1){
+            $job = \App\Job::where('jobs.id', $id);
+
+            $job = $job->join('job_staff', 'job_staff.job_id', '=', 'jobs.id')->whereHas('staffs', function($q) {
+                $q->where('id_user', Auth::user()->id);
+            })->select('jobs.*', 'job_staff.confirm')->first();
+        }else{
+            $job = \App\Job::findOrFail($id);
+        }
 
         return response()->json(['response' => 'success', 'job' => $job]);
     }
@@ -353,13 +368,16 @@ class JobController extends Controller
     public function estado(Request $request, $id)
     {
         $request->validate([
-            'status'      => 'required|integer'
+            'status'      => 'integer',
+            'tbc'      => 'boolean'
         ]);
         
         $job = \App\Job::findOrFail($id);
 
         if(isset($request->status))
             $job->status = $request->status;
+        if(isset($request->tbc))
+            $job->tbc = $request->tbc;
 
         $job->save();
 
@@ -374,7 +392,7 @@ class JobController extends Controller
      */
     public function destroy($id)
     {
-        $job = \App\Job::find($id);
+        $job = \App\Job::findOrFail($id);
         $job->delete();
 
         return response()->json(['message' => 'Job borrado existosamente!'], 201);
