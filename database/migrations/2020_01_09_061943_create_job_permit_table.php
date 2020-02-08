@@ -15,7 +15,8 @@ class CreateJobPermitTable extends Migration
     {
         Schema::create('job_permit', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->timestamps();
+            $table->integer('job_id');
+            $table->integer('archivo_id');
         });
     }
 

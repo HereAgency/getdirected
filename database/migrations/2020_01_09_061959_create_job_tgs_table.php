@@ -15,7 +15,8 @@ class CreateJobTgsTable extends Migration
     {
         Schema::create('job_tgs', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->timestamps();
+            $table->integer('job_id');
+            $table->integer('archivo_id');
         });
     }
 

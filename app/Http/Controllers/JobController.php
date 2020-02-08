@@ -217,7 +217,15 @@ class JobController extends Controller
             $job = \App\Job::findOrFail($id);
         }
 
-        return response()->json(['response' => 'success', 'job' => $job]);
+        $staffs = $job->staffs;
+        $client = $job->client;
+        $permits = $job->permits;
+        $tgs = $job->tgs;
+
+        return response()->json([
+            'response' => 'success', 
+            'job' => $job,
+        ]);
     }
 
     /**

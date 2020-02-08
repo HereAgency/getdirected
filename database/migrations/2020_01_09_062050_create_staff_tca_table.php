@@ -15,7 +15,8 @@ class CreateStaffTcaTable extends Migration
     {
         Schema::create('staff_tca', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->timestamps();
+            $table->integer('staff_id');
+            $table->integer('archivo_id');
         });
     }
 

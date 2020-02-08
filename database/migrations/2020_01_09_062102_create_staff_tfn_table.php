@@ -15,7 +15,8 @@ class CreateStaffTfnTable extends Migration
     {
         Schema::create('staff_tfn', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->timestamps();
+            $table->integer('staff_id');
+            $table->integer('archivo_id');
         });
     }
 
