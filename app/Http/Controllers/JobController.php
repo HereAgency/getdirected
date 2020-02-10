@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use setasign\Fpdi\Fpdi;
+use setasign\Fpdi\PdfReader;
 
 class JobController extends Controller
 {
@@ -226,6 +228,258 @@ class JobController extends Controller
             'response' => 'success', 
             'job' => $job,
         ]);
+    }
+
+    /**
+     * Genera pdf.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function generate($id)
+    {
+        $job = \App\Job::findOrFail($id);
+
+        $pdf = new Fpdi('L','mm',array(425,297));
+
+        $pageCount = $pdf->setSourceFile('templates_app_risk.pdf');
+
+        $pdf->SetFont('Arial','',12);
+
+        $pageId = $pdf->importPage(1, PdfReader\PageBoundaries::MEDIA_BOX);
+
+        $pdf->addPage('L');
+        $pdf->useImportedPage($pageId, 0, 0);
+        
+        $pageId = $pdf->importPage(2, PdfReader\PageBoundaries::MEDIA_BOX);
+
+        $pdf->addPage('L');
+        $pdf->useImportedPage($pageId, 0, 0);
+
+        $pdf->SetY(10);
+        $pdf->SetX(365);
+        $pdf->Write(4, $id); // ID DEL JOB
+
+        $pdf->SetY(19);
+        $pdf->SetX(281);
+        $pdf->Write(4, $job->client->name);
+
+        $pdf->SetY(19);
+        $pdf->SetX(370);
+        $pdf->Write(4, $job->date);
+
+        $pdf->SetY(26.5);
+        $pdf->SetX(154);
+        $pdf->Write(4, $job->address);
+
+        $pdf->SetY(26.5);
+        $pdf->SetX(324);
+        $pdf->Write(4, $job->location);
+
+        // INICIO
+
+        $pdf->SetY(52);
+        $pdf->SetX(77);
+        $pdf->Write(4, 'test');  // Vehicle Registration Number
+
+        $pdf->SetY(59);
+        $pdf->SetX(72);
+        $pdf->Write(4, 'test');  // Vehicle Storage Location
+
+        $pdf->SetY(65);
+        $pdf->SetX(45);
+        $pdf->Write(4, 'test');  // Date
+
+        $pdf->SetY(65);
+        $pdf->SetX(157);
+        $pdf->Write(4, 'x');  // BP
+
+        $pdf->SetY(65);
+        $pdf->SetX(173.5);
+        $pdf->Write(4, 'x');  // Caltex
+
+        $pdf->SetY(65);
+        $pdf->SetX(188.5);
+        $pdf->Write(4, 'x');  // Shell
+
+        // -----------------------
+
+        $pdf->SetY(83.5);
+        $pdf->SetX(55);
+        $pdf->Write(4, 'x');  // Frames QTY
+
+        $pdf->SetY(83.5);
+        $pdf->SetX(100);
+        $pdf->Write(4, 'x');  // Cones QTY
+
+        $pdf->SetY(83.5);
+        $pdf->SetX(160);
+        $pdf->Write(4, 'x');  // Delineator w/base QTY
+
+        $pdf->SetY(83.5);
+        $pdf->SetX(184);
+        $pdf->Write(4, 'x');  // Other
+
+        $pdf->SetY(89.5);
+        $pdf->SetX(51);
+        $pdf->Write(4, 'x');  // Legs QTY
+
+        $pdf->SetY(89.5);
+        $pdf->SetX(105.5);
+        $pdf->Write(4, 'x');  // Tiger Tails QTY
+
+        $pdf->SetY(89.5);
+        $pdf->SetX(151.5);
+        $pdf->Write(4, 'x');  // Sand Bags QTY
+
+        $pdf->SetY(89.5);
+        $pdf->SetX(182);
+        $pdf->Write(4, 'x');  // QTY
+
+        // -----------------------
+
+        $pdf->SetY(103);
+        $pdf->SetX(49);
+        $pdf->Write(4, 'x');  // Hard Hat 
+
+        $pdf->SetX(65);
+        $pdf->Write(4, 'x');  // Radio 
+
+        $pdf->SetX(89);
+        $pdf->Write(4, 'x');  // Safety Boots 
+
+        $pdf->SetX(107);
+        $pdf->Write(4, 'x');  // TC Shirt 
+
+        $pdf->SetX(130);
+        $pdf->Write(4, 'x');  // Long Pants 
+
+        $pdf->SetX(151.5);
+        $pdf->Write(4, 'x');  // Stop Baton 
+
+        $pdf->SetX(166.5);
+        $pdf->Write(4, 'x');  // Radio 
+
+        $pdf->SetX(198.5);
+        $pdf->Write(4, 'x');  // Wet Weather Gear
+
+        $pdf->SetY(110);
+        $pdf->SetX(58);
+        $pdf->Write(4, 'x');  // Safety Glasses 
+
+        $pdf->SetX(81);
+        $pdf->Write(4, 'x');  // Night Wand 
+
+        $pdf->SetX(103);
+        $pdf->Write(4, 'x');  // White Card 
+
+        $pdf->SetX(143.5);
+        $pdf->Write(4, 'x');  // Traffic Controller License 
+
+        $pdf->SetX(171);
+        $pdf->Write(4, 'x');  // All TC checked
+
+        // -----------------------
+
+        $daily_vehicle_check = array(
+            array(false,'test'), // 'headlights'
+            array(false,'test'), // 'indicators_front'
+            array(false,'test'), // 'indicators_back'
+            array(false,'test'), // 'reverse_lights'
+            array(false,'test'), // 'brake_lights'
+            array(false,'test'), // 'reverse_beeper'
+            array(false,'test'), // 'tyres_front'
+            array(false,'test'), // 'tyres_rear'
+            array(false,'test'), // 'tyre_spare'
+            array(false,'test'), // 'jack'
+            array(false,'test'), // 'oil'
+            array(false,'test'), // 'water'
+            array(false,'test'), // 'windscreen_wipers'
+            array(false,'test'), // 'brakes'
+            array(false,'test'), // 'fire_extinguisher'
+            array(false,'test'), // 'first_aid_kit'
+            array(false,'test'), // 'odometer_reading'
+            array(false,''), // 'windscreen'
+        );
+        $initial_y = 122;
+
+        foreach ($daily_vehicle_check as $key => $value) {
+
+            $pdf->SetY($initial_y+(5.48*($key+($key==17?1.3:0))));
+            if($value[0])
+                $pdf->SetX(110.5);    
+            else
+                $pdf->SetX(123.5);
+            $pdf->Write(4, 'x');  // FAIL
+            $pdf->SetX(133);
+            $pdf->Write(4, $value[1]);  // REASONS
+
+            if ($key == 15) {
+                $pdf->SetY(216);
+                $pdf->SetX(107);
+                $pdf->Write(4, '05');  
+                $pdf->SetX(115);
+                $pdf->Write(4, '05');  
+                $pdf->SetX(124);
+                $pdf->Write(4, '20');  // Next Service Due 
+            }
+
+        }
+        
+        $pageId = $pdf->importPage(3, PdfReader\PageBoundaries::MEDIA_BOX);
+
+        $pdf->addPage('L');
+        $pdf->useImportedPage($pageId, 0, 0);
+
+        $pdf->SetY(10);
+        $pdf->SetX(365);
+        $pdf->Write(4, $id); // ID DEL JOB
+
+        $pdf->SetY(19);
+        $pdf->SetX(281);
+        $pdf->Write(4, $job->client->name);
+
+        $pdf->SetY(19);
+        $pdf->SetX(370);
+        $pdf->Write(4, $job->date);
+
+        $pdf->SetY(26.5);
+        $pdf->SetX(154);
+        $pdf->Write(4, $job->address);
+
+        $pdf->SetY(26.5);
+        $pdf->SetX(324);
+        $pdf->Write(4, $job->location);
+        
+        $pageId = $pdf->importPage(4, PdfReader\PageBoundaries::MEDIA_BOX);
+
+        $pdf->addPage('L');
+        $pdf->useImportedPage($pageId, 0, 0);
+
+        $pdf->Output();
+
+        return response()->json(['message' => 'Archivo generado existosamente!'], 201);
+    }
+
+    /**
+     * Staff confirma job.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function confirm($id)
+    {
+        if(Auth::user()->type == 1){
+            $job = \App\Job::findOrFail($id);
+
+            $staff = \App\Staff::where('id_user', Auth::user()->id)->first();
+
+            $job->staffs()->updateExistingPivot($staff->id, array('confirm' => 1), false);
+
+            return response()->json(['message' => 'Job Confirmado!'], 201);
+        }else{
+           return response()->json(['message' => 'Accion unica para staffs'], 500);
+        }
     }
 
     /**

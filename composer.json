@@ -14,7 +14,9 @@
         "laravel/helpers": "^1.1",
         "laravel/passport": "^8.3",
         "laravel/tinker": "^2.0",
-        "laravolt/avatar": "^3.0"
+        "laravolt/avatar": "^3.0",
+        "setasign/fpdf": "^1.8",
+        "setasign/fpdi": "^2.2"
     },
     "require-dev": {
         "facade/ignition": "^1.4",

@@ -36,8 +36,10 @@ Route::group([
     Route::post('create', 'JobController@store');
     Route::post('edit/{id}', 'JobController@update');
     Route::post('status/{id}', 'JobController@estado');
+    Route::get('generate/{id}', 'JobController@generate');
     Route::get('delete/{id}', 'JobController@destroy');
     Route::get('show/{id}', 'JobController@show');
+    Route::get('confirm/{id}', 'JobController@confirm');
     Route::get('list', 'JobController@index');
 });
 

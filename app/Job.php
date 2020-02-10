@@ -16,7 +16,7 @@ class Job extends Model
     ];
 
     public function staffs(){
-        return $this->belongsToMany('App\Staff', 'job_staff', 'job_id', 'staff_id');
+        return $this->belongsToMany('App\Staff', 'job_staff', 'job_id', 'staff_id')->withPivot('confirm');
     }
 
     public function client(){
