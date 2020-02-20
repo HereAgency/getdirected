@@ -520,6 +520,7 @@ class JobController extends Controller
             'status'      => 'integer',
             'tbc'      => 'boolean',
             'client'      => 'integer',
+            'del_staffs.*'      => 'integer', // ARRAY DE STAFFS ELIMINADOS
             'del_per.*'      => 'integer', // ARRAY DE PERMITS ELIMINADOS
             'del_tgs.*'      => 'integer', // ARRAY DE TGS ELIMINADOS
             'staffs.*'      => 'integer', // ARRAY DE STAFFS
@@ -559,9 +560,27 @@ class JobController extends Controller
         // ADAPTAR ESTA PARTE A UPDATE
 
         if(isset($request->staffs)){
-            foreach ($request->staffs as $value) { // DIFERENCIA ENTRE ACTUAL Y NUEVO
+            foreach ($request->staffs as $value) {
                 $staff = \App\Staff::findOrFail($value);
                 $job->staffs()->save($staff);
+            }
+        }
+
+        if(isset($request->del_staffs)){
+            foreach ($request->del_staffs as $id_staff) {
+                $job->staffs()->detach($id_staff);
+            }
+        }
+
+        if(isset($request->del_per)){
+            foreach ($request->del_per as $id_per) {
+                $job->permits()->detach($id_per);
+            }
+        }
+
+        if(isset($request->del_tgs)){
+            foreach ($request->del_tgs as $id_tgs) {
+                $job->tgs()->detach($id_tgs);
             }
         }
 
@@ -640,6 +659,40 @@ class JobController extends Controller
             $job->status = $request->status;
         if(isset($request->tbc))
             $job->tbc = $request->tbc;
+
+        $job->save();
+
+        return response()->json(['message' => 'Estado cambiado existosamente!'], 201);
+    }
+
+    /**
+     * Asignar o eliminar staffs
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function asignar_staff(Request $request, $id)
+    {
+        $request->validate([
+            'del_staffs.*'      => 'integer', // ARRAY DE STAFFS ELIMINADOS
+            'staffs.*'      => 'integer', // ARRAY DE STAFFS
+        ]);
+        
+        $job = \App\Job::findOrFail($id);
+
+        if(isset($request->staffs)){
+            foreach ($request->staffs as $id_staff) {
+                $staff = \App\Staff::findOrFail($id_staff);
+                $job->staffs()->save($staff);
+            }
+        }
+
+        if(isset($request->del_staffs)){
+            foreach ($request->del_staffs as $id_staff) {
+                $job->staffs()->detach($id_staff);
+            }
+        }
 
         $job->save();
 
