@@ -675,22 +675,26 @@ class JobController extends Controller
     public function asignar_staff(Request $request, $id)
     {
         $request->validate([
-            'del_staffs.*'      => 'integer', // ARRAY DE STAFFS ELIMINADOS
             'staffs.*'      => 'integer', // ARRAY DE STAFFS
         ]);
         
         $job = \App\Job::findOrFail($id);
 
         if(isset($request->staffs)){
-            foreach ($request->staffs as $id_staff) {
-                $staff = \App\Staff::findOrFail($id_staff);
-                $job->staffs()->save($staff);
-            }
-        }
 
-        if(isset($request->del_staffs)){
-            foreach ($request->del_staffs as $id_staff) {
-                $job->staffs()->detach($id_staff);
+            foreach ($job->staffs as $staff) {
+                if(!in_array($staff->id, $request->staffs)){
+                    $job->staffs()->detach($staff->id);
+                }
+            }
+
+            if(!(count($request->staffs) == 1 && $request->staffs[0]==0))
+            foreach ($request->staffs as $id_staff) {
+                $exists = $job->staffs->contains($id_staff);
+                if (!$exists) {
+                    $staff = \App\Staff::findOrFail($id_staff);
+                    $job->staffs()->save($staff);
+                }
             }
         }
 

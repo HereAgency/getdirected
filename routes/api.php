@@ -36,7 +36,7 @@ Route::group([
     Route::post('create', 'JobController@store');
     Route::post('edit/{id}', 'JobController@update');
     Route::post('status/{id}', 'JobController@estado');
-    Route::post('staffs/{id}', 'JobController@asignar_staff');
+    Route::post('{id}/staffs', 'JobController@asignar_staff');
     Route::get('generate/{id}', 'JobController@generate');
     Route::get('delete/{id}', 'JobController@destroy');
     Route::get('show/{id}', 'JobController@show');
